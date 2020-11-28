@@ -14,13 +14,22 @@ function App() {
   const VIDEO_HEIGHT = 360;
   const FACE_API_MODELS_URI = '/models/face-api-models';
   const MASK_DETECTOR_MODEL_URI = '/models/mask-detector-model/model.json';
+
+  // Refs
   const videoRef = useRef();
   const canvasRef = useRef();
   const tmpCanvasRef = useRef();
 
   useEffect(() => {
     const webCamPromise = navigator.mediaDevices
-      .getUserMedia({ video: true, })
+      .getUserMedia({
+        audio: false,
+        video: {
+          // Prevent different size between video and canvas
+          width: VIDEO_WIDTH,
+          height: VIDEO_HEIGHT,
+        },
+      })
       .then((stream) => {
         window.stream = stream;
         videoRef.current.srcObject = stream;
@@ -45,7 +54,7 @@ function App() {
         const _maskDetectorModel = result[2];
 
         console.log('Webcam and models are loaded');
-        // console.log('mask detector model from promise', _maskDetectorModel.summary());
+        // console.log('mask detector model from promise', _maskDetectorModel);
 
         detect(_maskDetectorModel);
       })
@@ -85,21 +94,22 @@ function App() {
         tmpCtx.clearRect(0, 0, tmpCtx.canvas.width, tmpCtx.canvas.height);
         tmpCtx.drawImage(
           videoRef.current,
-          x, // Crop from x
-          y, // Crop from y
-          w, // Crop with width w
-          h, // Crop with height h
-          0, // Place from x
-          0, // Place from y
-          w, // Place with width w
-          h // Place width height h
+          x, // x coordinate where to start cropping the frame
+          y, // y coordinate where to start cropping the frame
+          w, // w (width) of the cropped frame
+          h, // h (height) of the cropped frame
+          0, // x coordinate where to start placing the cropped frame
+          0, // y coordinate where to start placing the cropped frame
+          w, // w (width) of the cropped frame
+          h  // h (height) of the cropped frame
         );
 
         predict(maskDetectorModel)
-          .then((outputs) => {
-            let [withMask, withoutMask] = outputs;
+          .then((prediction) => {
+            let [withMask, withoutMask] = prediction;
 
-            const treshold = 0.25;
+            // Tresholding the prediction
+            const treshold = 0.3;
 
             withMask -= treshold;
             withoutMask += treshold;
@@ -132,16 +142,16 @@ function App() {
     //   inputs = is_new_od_model ? inputs : inputs.reverse(-1); // RGB->BGR for old models
     // }
 
-    let inputs = tf.browser.fromPixels(tmpCanvasRef.current);
+    // Preprocessing image
+    let image = tf.browser.fromPixels(tmpCanvasRef.current);
+    image = tf.image.resizeBilinear(image, [224, 224]);
+    image = tf.cast(image, 'float32');
+    image = tf.tensor4d(Array.from(image.dataSync()), [1, 224, 224, 3])
 
-    inputs = tf.image.resizeBilinear(inputs, [224, 224]);
-    inputs = tf.cast(inputs, 'float32');
-    inputs = tf.tensor4d(Array.from(inputs.dataSync()), [1, 224, 224, 3])
-
-    // console.log('inputs', inputs);
+    // console.log('image', image);
     // console.log('maskDetectorModel', maskDetectorModel);
 
-    return maskDetectorModel.predict(inputs, { batchSize: 32 }).data();
+    return maskDetectorModel.predict(image, { batchSize: 32 }).data();
     // return new Promise((resolve) => resolve([0, 0]));
   }
 
