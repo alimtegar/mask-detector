@@ -81,6 +81,11 @@ function App() {
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
+    // Font options
+    const font = "16px sans-serif";
+    ctx.font = font;
+    ctx.textBaseline = "top";
+
     faceDetections.map((faceDetection) => {
       if (faceDetection) {
         console.log('A face is detected');
@@ -109,7 +114,7 @@ function App() {
             let [withMask, withoutMask] = prediction;
 
             // Tresholding the prediction
-            const treshold = 0.3;
+            const treshold = 0.25;
 
             withMask -= treshold;
             withoutMask += treshold;
@@ -118,13 +123,25 @@ function App() {
             console.log('withoutMask', withoutMask);
             console.log();
 
+            // Draw the box
             const color = withMask > withoutMask ? '#00FF00' : '#FF0000';
-            const label = withMask > withoutMask ? 'With mask' : 'Without mask';
 
-            // Draw the bounding box
             ctx.strokeStyle = color;
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 2;
             ctx.strokeRect(x, y, w, h);
+
+            // Draw the label 
+            const label = withMask > withoutMask ? 'masked' : 'not masked';
+
+            ctx.fillStyle = color;
+
+            const textWidth = ctx.measureText(label).width;
+            const textHeight = parseInt(font, 10);
+
+            ctx.fillRect(x - 1, y - (textHeight + 4), textWidth + 4, textHeight + 4);
+
+            ctx.fillStyle = "#000000";
+            ctx.fillText(label, x, y - textHeight);
           });
       }
     });
