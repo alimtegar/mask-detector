@@ -15,7 +15,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
     const tmpCanvasRef = useRef();
 
     useEffect(() => {
-        const webCamPromise = navigator.mediaDevices
+        navigator.mediaDevices
             .getUserMedia({
                 audio: false,
                 video: {
@@ -27,13 +27,8 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
             .then((stream) => {
                 window.stream = stream;
                 videoRef.current.srcObject = stream;
-
-                return new Promise((resolve, _) => {
-                    videoRef.current.onloadedmetadata = () => {
-                        resolve();
-                    };
-                });
             });
+
         const faceApiModelPromise = faceApi.nets.ssdMobilenetv1.loadFromUri(FACE_API_MODELS_URI);
         const maskDetectorModelPromise = tf.loadLayersModel(MASK_DETECTOR_MODEL_URI);
 
@@ -187,7 +182,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                         if (withMask > withoutMask) {
                             color = '#00FF00';
                             label = 'masked'
-                            
+
                             // maskedCount = maskedCount + 1;
                             // console.log('maskedCount', maskedCount);
                             setCount((prevCount) => ({
@@ -270,11 +265,11 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                     </div>
                 </div>
                 <span className="flex items-center text-xs text-gray-600 mt-4">
-                    <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{marginTop: -1,}}>
+                    <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginTop: -1, }}>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg> 
-                    
-                    
+                    </svg>
+
+
                     {log}
                 </span>
             </div>
