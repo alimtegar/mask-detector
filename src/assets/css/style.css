@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@500;700&display=swap');
+
+html {
+    font-family: 'Mulish', sans-serif;
+}
+
+[class *= "count-item"] > div {
+    position: relative;
+}
+[class *= "count-item"] > div:before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 3px;
+    height: calc(100% + 2px);
+}
+.count-item-masked > div:before {
+    background-color: #1EC39A;	
+}
+.count-item-not-masked > div:before {
+    background-color: #EF476F;	
+}
