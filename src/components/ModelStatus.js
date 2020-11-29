@@ -1,4 +1,4 @@
-const StatusIndicator = (status) => {
+const StatusIndicator = ({ status }) => {
     const LoadedStatusIndicator = (color) => (
         <svg className="h-4 w-4 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -31,15 +31,14 @@ const ModelStatus = ({ modelStatus }) => (
             <li>
                 <div className="flex justify-between items-center px-4 py-3 border-b border-gray-300">
                     Face API Models
-
-                    {modelStatus.faceApi.IsLoading ? (<StatusIndicator status="loading" />) : modelStatus.faceApi.IsLoaded ? (<StatusIndicator status="loaded" />) : (<StatusIndicator status="not-loaded" />)}
+                    {modelStatus.faceApi.isLoading ? (<StatusIndicator status="loading" />) : modelStatus.faceApi.isLoaded ? (<StatusIndicator status="loaded" />) : (<StatusIndicator status="not-loaded" />)}
                 </div>
             </li>
             <li>
                 <div className="flex justify-between items-center px-4 py-3">
                     Mask Detector Models
 
-                    {modelStatus.maskDetector.IsLoading ? (<StatusIndicator status="loading" />) : modelStatus.maskDetector.IsLoaded ? (<StatusIndicator status="loaded" />) : (<StatusIndicator status="not-loaded" />)}
+                    {modelStatus.maskDetector.isLoading ? (<StatusIndicator status="loading" />) : modelStatus.maskDetector.isLoaded ? (<StatusIndicator status="loaded" />) : (<StatusIndicator status="not-loaded" />)}
                 </div>
             </li>
         </ul>

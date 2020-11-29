@@ -6,6 +6,7 @@ import Video from './components/Video';
 
 const App = () => {
   const initModelStatus = { isLoading: true, };
+  const [log, setLog] = useState("");
   const [modelStatus, setModelStatus] = useState({
     faceApi: initModelStatus,
     maskDetector: initModelStatus,
@@ -27,8 +28,14 @@ const App = () => {
             />
           </div>
           <section className="col-span-3 bg-gray-100 min-h-screen">
-              <Video />
-            </section>
+            
+            <Video
+            log={log}
+              setLog={setLog}
+              setModelStatus={setModelStatus}
+              setCount={setCount}
+            />
+          </section>
         </div>
       </main>
     </div>

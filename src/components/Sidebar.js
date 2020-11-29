@@ -14,15 +14,15 @@ const Sidebar = ({
                 <h1 className="font-extrabold">
                     Mask Detector
             </h1>
-                <span className="text-sm font-bold">
-                    v{version}
+            <span className="text-sm font-bold">
+                v{version}
             </span>
             </div>
             <div className="p-8">
                 <ModelStatus
                     modelStatus={modelStatus}
                 />
-                <div className="mb-8">
+                {/* <div className="mb-8">
                     <h2 className="text-sm text-gray-900 font-bold mb-4">
                         Active Webcam
                     </h2>
@@ -32,7 +32,7 @@ const Sidebar = ({
                             FaceTime HD
                         </option>
                     </select>
-                </div>
+                </div> */}
                 <Count count={count}/>
             </div>
         </aside>
