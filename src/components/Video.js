@@ -178,8 +178,8 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                         withMask -= treshold;
                         withoutMask += treshold;
 
-                        console.log('withMask', withMask);
-                        console.log('withoutMask', withoutMask);
+                        // console.log('withMask', withMask);
+                        // console.log('withoutMask', withoutMask);
 
                         let color = '#FF0000';
                         let label = 'not masked';
@@ -242,7 +242,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
     }
 
     return (
-        <div className="relative flex justify-center items-center w-full h-full">
+        <div className="relative flex justify-center items-center w-full h-screen">
             <div className="flex flex-col">
                 <div className="flex justify-center items-center">
                     <div

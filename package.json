@@ -1,6 +1,6 @@
 {
   "name": "mask-detector",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
@@ -11,6 +11,7 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.2.2",
     "autoprefixer": "^10.0.4",
+    "express": "^4.17.1",
     "face-api.js": "^0.22.2",
     "postcss-cli": "^8.3.0",
     "react": "^17.0.1",
