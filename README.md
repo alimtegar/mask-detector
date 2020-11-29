@@ -11,8 +11,13 @@
 - [Face API JS](https://justadudewhohacks.github.io/face-api.js/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
+
+
 ## Demo
 - [https://mask-detector.alter.web.id](https://mask-detector.alter.web.id)
+
+## Quick Download Link
+- [https://github.com/alimtegar/mask-detector/archive/master.zip](https://github.com/alimtegar/mask-detector/archive/master.zip)
 
 ## 🚀&nbsp; Installation
 1. Clone the repo
@@ -38,6 +43,9 @@ $ node server
 ```
 $ node server
 ```
+
+## :email: Email
+* [alimtegar404@gmail.com](mailto://alimtegar404@gmail.com)
 
 ## Credits
 * [https://github.com/chandrikadeb7/Face-Mask-Detection/](https://github.com/chandrikadeb7/Face-Mask-Detection/)
