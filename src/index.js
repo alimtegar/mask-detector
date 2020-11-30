@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // Import styles
-import './assets/css/tailwind.output.css';
+import './index.css';
 import './assets/css/style.css';
 
 ReactDOM.render(

@@ -5,8 +5,8 @@ import * as tf from '@tensorflow/tfjs';
 // import "@tensorflow/tfjs-node";
 
 const Video = ({ log, setLog, setModelStatus, setCount }) => {
-    const VIDEO_WIDTH = 480;
-    const VIDEO_HEIGHT = 360;
+    const VIDEO_WIDTH = 640;
+    const VIDEO_HEIGHT = 480;
     const FACE_API_MODELS_URI = '/models/face-api-models';
     const MASK_DETECTOR_MODEL_URI = '/models/mask-detector-model/model.json';
 
