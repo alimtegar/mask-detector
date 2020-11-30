@@ -6,15 +6,13 @@
 
 ## Framework/Library Used
 
-- [React JS](https://reactjs.org/)
-- [TensorFlow JS](https://https://js.tensorflow.org/)
-- [Face API JS](https://justadudewhohacks.github.io/face-api.js/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
-
+- [React JS](https://reactjs.org)
+- [TensorFlow JS](https://https://js.tensorflow.org)
+- [Face API JS](https://justadudewhohacks.github.io/face-api.js)
+- [Tailwind CSS](https://tailwindcss.com)
 
 ## Demo
-- [https://alimtegar-mask-detector.herokuapp.com/](https://alimtegar-mask-detector.herokuapp.com/)
+[![Already deployed version](https://raw.githubusercontent.com/vasantvohra/TrashNet/master/hr.svg)](https://alimtegar-mask-detector.herokuapp.com)
 
 ## Quick Download Link
 - [https://github.com/alimtegar/mask-detector/archive/master.zip](https://github.com/alimtegar/mask-detector/archive/master.zip)
@@ -48,4 +46,4 @@ $ Server listening on port 5000
 * [alimtegar404@gmail.com](mailto://alimtegar404@gmail.com)
 
 ## Credits
-* [https://github.com/chandrikadeb7/Face-Mask-Detection/](https://github.com/chandrikadeb7/Face-Mask-Detection/)
+* [https://github.com/chandrikadeb7/Face-Mask-Detection](https://github.com/chandrikadeb7/Face-Mask-Detection)
