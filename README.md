@@ -14,7 +14,7 @@
 
 
 ## Demo
-- [https://mask-detector.alter.web.id](https://mask-detector.alter.web.id)
+- [https://alimtegar-mask-detector.herokuapp.com/](https://alimtegar-mask-detector.herokuapp.com/)
 
 ## Quick Download Link
 - [https://github.com/alimtegar/mask-detector/archive/master.zip](https://github.com/alimtegar/mask-detector/archive/master.zip)
@@ -32,16 +32,16 @@ $ npm install
 
 3. Build the application
 ```
-$ npm run build
+$ npm run react-build
 ```
 
 4. Run the application that has been built by running the server using Node JS
 ```
-$ node server
+$ npm start
 ```
-5. The application will listening on port 9000. Open <code>localhost:9000</code> on your browser to start using the application
+5. The application will listening on port 5000. Open <code>localhost:5000</code> on your browser to start using the application
 ```
-$ node server
+$ Server listening on port 5000
 ```
 
 ## :email: Email
