@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const PORT = 9000;
+const PORT = process.env.PORT || 5000;;
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -11,5 +11,5 @@ app.get('/', function (_, res) {
 });
 
 app.listen(PORT, function() {
-    console.log(`Listening on port ${PORT}`)
+    console.log(`Server istening on port ${PORT}`)
 });
