@@ -7,6 +7,7 @@ import Video from './components/Video';
 const App = () => {
   const initModelStatus = { isLoading: true, };
   const [log, setLog] = useState("");
+  const [media, setMedia] = useState('video');
   const [modelStatus, setModelStatus] = useState({
     faceApi: initModelStatus,
     maskDetector: initModelStatus,
@@ -23,6 +24,8 @@ const App = () => {
         <div className="grid grid-cols-4">
           <div>
             <Sidebar
+              media={media}
+              setMedia={setMedia}
               modelStatus={modelStatus}
               count={count}
             />
@@ -30,8 +33,10 @@ const App = () => {
           <section className="col-span-3 bg-gray-100 min-h-screen">
             
             <Video
-            log={log}
+              log={log}
               setLog={setLog}
+              media={media}
+              setMedia={setMedia}
               setModelStatus={setModelStatus}
               setCount={setCount}
             />

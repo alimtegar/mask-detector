@@ -1,14 +1,21 @@
-
 import { useEffect, useRef, useCallback } from 'react';
 import * as faceApi from 'face-api.js';
 import * as tf from '@tensorflow/tfjs';
 // import "@tensorflow/tfjs-node";
+import { useDropzone } from 'react-dropzone';
 
-const Video = ({ log, setLog, setModelStatus, setCount }) => {
-    const VIDEO_WIDTH = 640;
-    const VIDEO_HEIGHT = 480;
+const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
+    const VIDEO_WIDTH = 480; // 640
+    const VIDEO_HEIGHT = 360; // 480
     const FACE_API_MODELS_URI = '/models/face-api-models';
     const MASK_DETECTOR_MODEL_URI = '/models/mask-detector-model/model.json';
+
+    // Dropzone
+    // const onDrop = useCallback(acceptedFiles => {
+    //     // Do something with the files
+    //     console.log(acceptedFiles)
+    //   }, []);
+    //   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
 
     // Refs
     const videoRef = useRef();
@@ -35,16 +42,16 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
         ctx.font = font;
         ctx.textBaseline = "top";
 
-        // setLog('Predicting whether face/s is wearing a mask or not...');
+        setLog('Predicting whether face/s is wearing a mask or not...');
 
         faceDetections.map((faceDetection) => {
             if (faceDetection) {
-                // setLog('Face detected');
+                setLog('Face detected');
 
-                const x = faceDetection.box._x;
-                const y = faceDetection.box._y;
-                const w = faceDetection.box._width;
-                const h = faceDetection.box._height;
+                const x = faceDetection.box._x / videoRef.current.videoWidth * VIDEO_WIDTH;
+                const y = faceDetection.box._y / videoRef.current.videoHeight * VIDEO_HEIGHT;
+                const w = faceDetection.box._width / videoRef.current.videoWidth * VIDEO_WIDTH;
+                const h = faceDetection.box._height / videoRef.current.videoHeight * VIDEO_HEIGHT;
 
                 // Crop video frame
                 tmpCtx.clearRect(0, 0, tmpCtx.canvas.width, tmpCtx.canvas.height);
@@ -62,12 +69,14 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
 
                 predict(maskDetectorModel)
                     .then((prediction) => {
-                        // setLog('Mask detected')
+                        setLog('Mask detected')
 
                         let [withMask, withoutMask] = prediction;
 
+                        console.log({ prediction });
+
                         // Tresholding the prediction
-                        const treshold = 0.3;
+                        const treshold = 0.0; // 0.3
 
                         withMask -= treshold;
                         withoutMask += treshold;
@@ -98,7 +107,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                         // Draw the box
                         // const color = withMask > withoutMask ? '#00FF00' : '#FF0000';
 
-                        // setLog('Rendering detection box...');
+                        setLog('Rendering detection box...');
 
                         ctx.strokeStyle = color;
                         ctx.lineWidth = 3;
@@ -124,7 +133,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
     }, [setCount]);
 
     const detect = useCallback((maskDetectorModel) => {
-        // setLog('Detecting faces...');
+        setLog('Detecting faces...');
 
         faceApi.detectAllFaces(videoRef.current)
             .then((faceDetections) => {
@@ -136,24 +145,26 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
     }, [renderDetectionBox]);
 
     useEffect(() => {
-        navigator.mediaDevices
-            .getUserMedia({
-                audio: false,
-                video: {
-                    // Prevent different size between video and canvas
-                    width: VIDEO_WIDTH,
-                    height: VIDEO_HEIGHT,
-                },
-            })
-            .then((stream) => {
-                window.stream = stream;
-                videoRef.current.srcObject = stream;
-            });
+        if (media !== 'video') {
+            navigator.mediaDevices
+                .getUserMedia({
+                    audio: false,
+                    video: {
+                        // Prevent different size between video and canvas
+                        width: VIDEO_WIDTH,
+                        height: VIDEO_HEIGHT,
+                    },
+                })
+                .then((stream) => {
+                    window.stream = stream;
+                    videoRef.current.srcObject = stream;
+                });
+        }
 
         const faceApiModelPromise = faceApi.nets.ssdMobilenetv1.loadFromUri(FACE_API_MODELS_URI);
         const maskDetectorModelPromise = tf.loadLayersModel(MASK_DETECTOR_MODEL_URI);
 
-        // setLog('Loading Face API models...');
+        setLog('Loading Face API models...');
 
         faceApiModelPromise
             .then(() => {
@@ -166,8 +177,8 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                     },
                 }));
 
-                // setLog('Face API Models are loaded');
-                // setLog('Loading Mask Detector model...');
+                setLog('Face API Models are loaded');
+                setLog('Loading Mask Detector model...');
 
                 maskDetectorModelPromise
                     .then((maskDetectorModel) => {
@@ -180,7 +191,7 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
 
                         }));
 
-                        // setLog('Mask Detector Model is loaded');
+                        setLog('Mask Detector Model is loaded');
 
                         detect(maskDetectorModel);
                     })
@@ -207,26 +218,10 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                 }));
                 console.error(error)
             });
-
-        // Promise.all([
-        //     webCamPromise,
-        //     faceApiModelPromise,
-        //     maskDetectorModelPromise,
-        // ])
-        //     .then((result) => {
-        //         const _maskDetectorModel = result[2];
-
-        //         console.log('Webcam and models are loaded');
-
-        //         detect(_maskDetectorModel);
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
     }, [detect, setModelStatus]);
 
     const predict = (maskDetectorModel) => {
-        // setLog('Predicting...')
+        setLog('Predicting...')
 
         // Preprocessing image
         let image = tf.browser.fromPixels(tmpCanvasRef.current);
@@ -248,15 +243,28 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                             height: VIDEO_HEIGHT
                         }}
                     >
-                        <video
-                            className="absolute"
-                            autoPlay
-                            playsInline
-                            muted
-                            width={VIDEO_WIDTH}
-                            height={VIDEO_HEIGHT}
-                            ref={videoRef}
-                        />
+                        {media === "video" ? (
+                            <video
+                                className="absolute"
+                                autoPlay
+                                playsInline
+                                muted
+                                width={VIDEO_WIDTH}
+                                height={VIDEO_HEIGHT}
+                                ref={videoRef}
+                                src='/videos/video.mp4'
+                            />
+                        ) : (
+                            <video
+                                className="absolute"
+                                autoPlay
+                                playsInline
+                                muted
+                                width={VIDEO_WIDTH}
+                                height={VIDEO_HEIGHT}
+                                ref={videoRef}
+                            />
+                        )}
                         <canvas
                             className="absolute"
                             width={VIDEO_WIDTH}
@@ -265,14 +273,16 @@ const Video = ({ log, setLog, setModelStatus, setCount }) => {
                         />
                     </div>
                 </div>
-                {/* <span className="flex items-center text-xs text-gray-600 mt-4">
+
+                <span className="flex items-center text-xs text-gray-600 mt-4">
                     <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginTop: -1, }}>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
 
 
                     {log}
-                </span> */}
+                </span>
+
             </div>
             <canvas
                 ref={tmpCanvasRef}

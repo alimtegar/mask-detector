@@ -11,6 +11,7 @@
     "postcss": "^7.0.35",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-dropzone": "^11.2.4",
     "react-scripts": "4.0.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
     "web-vitals": "^1.0.1"
@@ -19,10 +20,8 @@
     "start": "node server",
     "react-start": "craco start",
     "react-build": "craco build",
-
     "test": "craco test",
     "eject": "react-scripts eject",
-
     "heroku-postbuild": "npm install && npm run react-build"
   },
   "eslintConfig": {
