@@ -258,12 +258,13 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
                                 }}
                             >
                                 {({ getRootProps, getInputProps }) => (
-                                    <section className="absolute z-30 text-gray-500">
-                                        <div {...getRootProps()}>
-                                            <input {...getInputProps()} />
-                                            <p>Drag 'n' drop some files here, or click to select files</p>
-                                        </div>
-                                    </section>
+                                    <div
+                                        className="absolute z-30 flex justify-center items-center bg-gray-100 text-center text-sm text-gray-500 w-full h-full border-3 border-gray-300 hover:border-green-500 border-dashed cursor-pointer focus:outline-none"
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        <p>Drag 'n' drop your video here, <br /> or click to select video</p>
+                                    </div>
                                 )}
                             </Dropzone>
                         ) : null}
