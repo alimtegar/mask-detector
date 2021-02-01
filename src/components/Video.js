@@ -1,27 +1,31 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import * as faceApi from 'face-api.js';
 import * as tf from '@tensorflow/tfjs';
 // import "@tensorflow/tfjs-node";
-import { useDropzone } from 'react-dropzone';
+import Dropzone from 'react-dropzone';
+
+const InfoIcon = () => (
+    <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginTop: -1, }}>
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
 
 const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
+    // Constants
     const VIDEO_WIDTH = 480; // 640
     const VIDEO_HEIGHT = 360; // 480
     const FACE_API_MODELS_URI = '/models/face-api-models';
     const MASK_DETECTOR_MODEL_URI = '/models/mask-detector-model/model.json';
 
-    // Dropzone
-    // const onDrop = useCallback(acceptedFiles => {
-    //     // Do something with the files
-    //     console.log(acceptedFiles)
-    //   }, []);
-    //   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
+    // States
+    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
     // Refs
     const videoRef = useRef();
     const canvasRef = useRef();
     const tmpCanvasRef = useRef();
 
+    // Functions
     const renderDetectionBox = useCallback((faceDetections, maskDetectorModel) => {
         setCount((prevCount) => ({
             ...prevCount,
@@ -144,8 +148,9 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
             }).catch((error) => console.error(error));
     }, [renderDetectionBox]);
 
+    // Effects
     useEffect(() => {
-        if (media !== 'video') {
+        if (media === 'webcam') {
             navigator.mediaDevices
                 .getUserMedia({
                     audio: false,
@@ -237,36 +242,42 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
             <div className="flex flex-col">
                 <div className="flex justify-center items-center">
                     <div
-                        className="relative inline-flex bg-gray-300 overflow-hidden"
+                        className="relative inline-flex justify-center items-center bg-gray-300 overflow-hidden"
                         style={{
                             width: VIDEO_WIDTH,
                             height: VIDEO_HEIGHT
                         }}
                     >
-                        {media === "video" ? (
-                            <video
-                                className="absolute"
-                                autoPlay
-                                playsInline
-                                muted
-                                width={VIDEO_WIDTH}
-                                height={VIDEO_HEIGHT}
-                                ref={videoRef}
-                                src='/videos/video.mp4'
-                            />
-                        ) : (
-                            <video
-                                className="absolute"
-                                autoPlay
-                                playsInline
-                                muted
-                                width={VIDEO_WIDTH}
-                                height={VIDEO_HEIGHT}
-                                ref={videoRef}
-                            />
-                        )}
+                        {media === 'video' && !isVideoLoaded ? (
+                            <Dropzone
+                                onDrop={(acceptedFiles) => {
+                                    const acceptedFile = acceptedFiles[0];
+
+                                    videoRef.current.src = URL.createObjectURL(acceptedFile);
+                                    setIsVideoLoaded(true);
+                                }}
+                            >
+                                {({ getRootProps, getInputProps }) => (
+                                    <section className="absolute z-30 text-gray-500">
+                                        <div {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <p>Drag 'n' drop some files here, or click to select files</p>
+                                        </div>
+                                    </section>
+                                )}
+                            </Dropzone>
+                        ) : null}
+
+                        <video
+                            className="absolute z-10"
+                            autoPlay
+                            playsInline
+                            width={VIDEO_WIDTH}
+                            height={VIDEO_HEIGHT}
+                            ref={videoRef}
+                        />
                         <canvas
-                            className="absolute"
+                            className="absolute z-20"
                             width={VIDEO_WIDTH}
                             height={VIDEO_HEIGHT}
                             ref={canvasRef}
@@ -275,10 +286,7 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
                 </div>
 
                 <span className="flex items-center text-xs text-gray-600 mt-4">
-                    <svg className="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ marginTop: -1, }}>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-
+                    <InfoIcon />
 
                     {log}
                 </span>

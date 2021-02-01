@@ -15,7 +15,7 @@ const Media = ({ media, setMedia }) => {
             <h2 className="text-sm text-gray-900 font-bold mb-4">Selected Media</h2>
             <div className="text-sm -my-1">
                 {medias.map((mediasItem, key) => (
-                    <div className="my-1" key={key}>
+                    <div className="my-2" key={key}>
                         <input 
                             className="mr-2" 
                             type="radio" 
