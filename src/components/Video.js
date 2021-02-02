@@ -10,7 +10,14 @@ const InfoIcon = () => (
     </svg>
 );
 
-const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
+const Video = ({ 
+    log, 
+    setLog, 
+    media, 
+    // setMedia, 
+    setModelStatus, 
+    setCount 
+}) => {
     // Constants
     const VIDEO_WIDTH = 480; // 640
     const VIDEO_HEIGHT = 360; // 480
@@ -151,6 +158,9 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
     // Effects
     useEffect(() => {
         if (media === 'webcam') {
+            setLog('Loading web camera...');
+            setIsVideoLoaded(false);
+
             navigator.mediaDevices
                 .getUserMedia({
                     audio: false,
@@ -162,6 +172,7 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
                 })
                 .then((stream) => {
                     window.stream = stream;
+                    videoRef.current.src = null;
                     videoRef.current.srcObject = stream;
                 });
         }
@@ -223,7 +234,7 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
                 }));
                 console.error(error)
             });
-    }, [detect, setModelStatus]);
+    }, [detect, setModelStatus, media]);
 
     const predict = (maskDetectorModel) => {
         setLog('Predicting...')
@@ -253,6 +264,8 @@ const Video = ({ log, setLog, media, setMedia, setModelStatus, setCount }) => {
                                 onDrop={(acceptedFiles) => {
                                     const acceptedFile = acceptedFiles[0];
 
+                                    setLog('Loading video...');
+                                    videoRef.current.srcObject = null;
                                     videoRef.current.src = URL.createObjectURL(acceptedFile);
                                     setIsVideoLoaded(true);
                                 }}

@@ -17,15 +17,15 @@ const Media = ({ media, setMedia }) => {
                 {medias.map((mediasItem, key) => (
                     <div className="my-2" key={key}>
                         <input 
-                            className="mr-2" 
+                            className="mr-3 cursor-pointer" 
                             type="radio" 
                             id={mediasItem.value} 
                             name="media" 
                             value={mediasItem.value} 
                             checked={mediasItem.value === media} 
-                            onChange={() => setMedia(mediasItem.value)}
+                            onChange={() => {setMedia(mediasItem.value)}}
                         />
-                        <label className="text-gray-700" forhtml={mediasItem.value}>{mediasItem.title}</label>
+                        <label className="text-gray-700 cursor-pointer" htmlFor={mediasItem.value}>{mediasItem.title}</label>
                     </div>
                 ))}
             </div>

@@ -1,6 +1,6 @@
 import { version } from '../../package.json';
 
-// Import components
+// Components
 import Media from './Media';
 import ModelStatus from './ModelStatus';
 import Count from './Count';

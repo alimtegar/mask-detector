@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-// Import components
+// Components
 import Sidebar from './components/Sidebar';
 import Video from './components/Video';
 
 const App = () => {
+  // States
   const initModelStatus = { isLoading: true, };
   const [log, setLog] = useState("");
   const [media, setMedia] = useState('video');
@@ -31,7 +32,7 @@ const App = () => {
             />
           </div>
           <section className="col-span-3 bg-gray-100 min-h-screen">
-            
+
             <Video
               log={log}
               setLog={setLog}
