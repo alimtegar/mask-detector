@@ -1,10 +1,13 @@
-import {version} from '../../package.json';
+import { version } from '../../package.json';
 
-// Import components
+// Components
+import Media from './Media';
 import ModelStatus from './ModelStatus';
 import Count from './Count';
 
 const Sidebar = ({
+    media,
+    setMedia,
     modelStatus,
     count
 }) => {
@@ -14,14 +17,14 @@ const Sidebar = ({
                 <h1 className="font-extrabold">
                     Mask Detector
             </h1>
-            <span className="text-sm font-bold">
-                v{version}
-            </span>
+                <span className="text-sm font-bold">
+                    v{version}
+                </span>
             </div>
             <div className="p-8">
-                <ModelStatus
-                    modelStatus={modelStatus}
-                />
+                <Media media={media} setMedia={setMedia} />
+
+                <ModelStatus modelStatus={modelStatus} />
                 {/* <div className="mb-8">
                     <h2 className="text-sm text-gray-900 font-bold mb-4">
                         Active Webcam
@@ -33,7 +36,7 @@ const Sidebar = ({
                         </option>
                     </select>
                 </div> */}
-                <Count count={count}/>
+                <Count count={count} />
             </div>
         </aside>
     );
